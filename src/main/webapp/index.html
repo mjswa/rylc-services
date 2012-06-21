@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html ng-app="rylc">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+
+  <link rel="stylesheet" href="lib/jquery.mobile.css">
+
+  <!-- make page testable for jasmine ui -->
+  <script>eval(sessionStorage.jasmineui);</script>
+
+  <!-- Libraries -->
+  <script src="lib/jquery.js"></script>
+  <script src="lib/jquery.mobile.js"></script>
+  <script src="lib/angular.js"></script>
+  <script src="lib/jquery-mobile-angular-adapter.js"></script>
+
+  <!-- Application -->
+  <script src="app/services.js"></script>
+  <script src="app/controllers.js"></script>
+  <script src="app/markup.js"></script>
+  <script src="app/application.js"></script>
+
+  <title>RYLC</title>
+</head>
+<body>
+
+<div id="loginPage" data-role="page" ngm-shared-controller="ctrl:rylc.ApplicationController">
+  <div data-role="header">
+    <h1>RYLC - Login</h1>
+  </div>
+  <div data-role="content">
+    <form name="loginPage_form" data-ajax="false" ng-submit="ctrl.login()">
+      <div data-role="fieldcontain">
+        <label for="loginPage_username">Benutzername</label>
+        <input type="text" id="loginPage_username" ng-model="ctrl.username" ng-required="true">
+      </div>
+      <div data-role="fieldcontain">
+        <label for="loginPage_password">Passwort</label>
+        <input type="password" id="loginPage_password" ng-model="ctrl.password" ng-required="true">
+      </div>
+      <input type="submit" class="login" value="Login" ng-disabled="!ctrl.loginPossible()">
+    </form>
+  </div>
+</div>
+
+<div id="welcomePage" data-role="page" ngm-shared-controller="ctrl:rylc.ApplicationController">
+  <div data-role="header">
+    <h1 class="greeting">Hallo {{ctrl.customer.name}}</h1>
+    <a href="index.html" class="ui-btn-right" data-ajax="false">Logout</a>
+  </div>
+  <div data-role="content">
+    <a href="" data-role="button">Neue Buchung</a>
+    <a href="#rentalHistoryPage" data-role="button">Buchungen</a>
+    <a href="#profilePage" data-role="button">Benutzerprofil</a>
+  </div>
+</div>
+
+<div id="profilePage" data-role="page" ngm-shared-controller="ctrl:rylc.ApplicationController">
+  <div data-role="header">
+    <h1>Profil von {{ctrl.customer.name}}</h1>
+    <a href="" data-rel="back">Zur&uuml;ck</a>
+    <a href="index.html" class="ui-btn-right" data-ajax="false">Logout</a>
+  </div>
+  <div data-role="content">
+    <div data-role="fieldcontain">
+      <label for="profilePage_username">Benutzername</label>
+      <input type="text" id="profilePage_username" value="{{ctrl.username}}" disabled="disabled">
+    </div>
+    <div data-role="fieldcontain">
+      <label for="profilePage_name">Name</label>
+      <input type="text" id="profilePage_name" value="{{ctrl.customer.name}}" disabled="disabled">
+    </div>
+    <div data-role="fieldcontain">
+      <label for="profilePage_street">Stra&szlig;e</label>
+      <input type="text" id="profilePage_street" value="{{ctrl.customer.street}}" disabled="disabled">
+    </div>
+    <div data-role="fieldcontain">
+      <label for="profilePage_zip">PLZ</label>
+      <input type="text" id="profilePage_zip" value="{{ctrl.customer.zip}}" disabled="disabled">
+    </div>
+    <div data-role="fieldcontain">
+      <label for="profilePage_city">Ort</label>
+      <input type="text" id="profilePage_city" value="{{ctrl.customer.city}}" disabled="disabled">
+    </div>
+    <div data-role="fieldcontain">
+      <label for="profilePage_email">E-Mail</label>
+      <input type="text" id="profilePage_email" value="{{ctrl.customer.email}}" disabled="disabled">
+    </div>
+  </div>
+</div>
+
+<div id="rentalHistoryPage" data-role="page"
+     ngm-shared-controller="ctrl:rylc.ApplicationController"
+     ngm-pagebeforeshow="ctrl.searchRentals()">
+  <div data-role="header">
+    <h1>Buchungen von {{ctrl.customer.name}}</h1>
+    <a href="" data-rel="back">Zur&uuml;ck</a>
+    <a href="index.html" class="ui-btn-right" data-ajax="false">Logout</a>
+  </div>
+  <div data-role="content">
+    <ul data-role="listview" id="rentalHistoryPage_list">
+      <li ng-repeat="rental in ctrl.rentals" class="rental">
+        <h4><span class="manufacturer">{{rental.car.manufacturer}}</span> <span class="description">{{rental.car.description}}</span></h4>
+        <p><span class="startDate">{{rental.hireStartDate | simpleDate}}</span> - <span class="endDate">{{rental.hireEndDate | simpleDate}}</span></p>
+        <p class="ui-li-aside">Total: <span class="totalPrice">{{ctrl.totalPrice(rental) | currency:"&euro;"}}</span></p>
+      </li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>
