@@ -1,6 +1,11 @@
 describeUi('login', '/rylc-services/index.html', function () {
   var someUsername = "someUsername";
   var somePassword = "somePassword";
+  var someCustomer = {id:"someID", name:"someName"};
+
+  beforeLoad(function () {
+    mockBackend();
+  });
 
   it('should show login page when visiting the application', function () {
     runs(function () {
@@ -36,6 +41,7 @@ describeUi('login', '/rylc-services/index.html', function () {
 
   it('should show the welcome page after successful login', function () {
     runs(function () {
+      backendServiceResult("login").resolve(someCustomer);
       value("#loginPage_username", someUsername);
       value("#loginPage_password", somePassword);
       click(".login");
@@ -47,13 +53,27 @@ describeUi('login', '/rylc-services/index.html', function () {
 
     it('should greet the user after successful login', function () {
       runs(function () {
+        backendServiceResult("login").resolve(someCustomer);
         value("#loginPage_username", someUsername);
         value("#loginPage_password", somePassword);
         click(".login");
       });
       runs(function () {
-          expect(value(".greeting")).toBe('Hallo ' + someUsername);
+          expect(value(".greeting")).toBe('Hallo ' + someCustomer.name);
       });
     });
 
+  it('should show an error when the backend reports an error on login', function () {
+    var someBackendError = "someBackendError";
+    runs(function () {
+      backendServiceResult('login').reject(someBackendError);
+      value("#loginPage_username", someUsername);
+      value("#loginPage_password", somePassword);
+      click(".login");
+    });
+    runs(function () {
+      expect(activePageId()).toBe('loginPage');
+      expect(value(".error")).toEqual(someBackendError);
+    });
+  });
 });

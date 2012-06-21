@@ -5,11 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 
   <link rel="stylesheet" href="lib/jquery.mobile.css">
+  <link rel="stylesheet" href="rylc.css">
 
   <!-- make page testable for jasmine ui -->
   <script>eval(sessionStorage.jasmineui);</script>
 
   <!-- Libraries -->
+  <script src="lib/JSONParseDate.js"></script>
+  <script src="lib/Base64.js"></script>
   <script src="lib/jquery.js"></script>
   <script src="lib/jquery.mobile.js"></script>
   <script src="lib/angular.js"></script>
@@ -30,6 +33,7 @@
     <h1>RYLC - Login</h1>
   </div>
   <div data-role="content">
+    <div class="error" ngm-if="ctrl.errorMessage">{{ctrl.errorMessage}}</div>
     <form name="loginPage_form" data-ajax="false" ng-submit="ctrl.login()">
       <div data-role="fieldcontain">
         <label for="loginPage_username">Benutzername</label>
@@ -94,7 +98,7 @@
      ngm-shared-controller="ctrl:rylc.ApplicationController"
      ngm-pagebeforeshow="ctrl.searchRentals()">
   <div data-role="header">
-    <h1>Buchungen von {{ctrl.customer.name}}</h1>
+    <h1 class="greeting">Buchungen von {{ctrl.customer.name}}</h1>
     <a href="" data-rel="back">Zur&uuml;ck</a>
     <a href="index.html" class="ui-btn-right" data-ajax="false">Logout</a>
   </div>

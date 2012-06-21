@@ -4,28 +4,45 @@
    * backendService
    */
 
-  function backendServiceFactory($rootScope, $q) {
+  function backendServiceFactory($http, $q) {
+    var backendBaseUri = '/rylc-services/api';
 
     function login(username, password) {
-      var deferred = $q.defer();
-      setTimeout(function () {
-        deferred.resolve({name:username});
-        $rootScope.$digest();
-      }, 50);
-      return deferred.promise;
+      return $http({
+        url:backendBaseUri + '/customers?username=' + username,
+        method:'GET',
+        headers:{
+          'Authorization':"Basic " + Base64.encode(username + ':' + password)
+        }
+      }).then(function(response) {
+          return response.data;
+        }, function (response) {
+        var errorCode = response.status;
+        var errorMessage = "Ein unbekannter Fehler ist aufgetreten.";
+        if (errorCode == 401) {
+          errorMessage = "Zugriff verweigert.";
+        }
+        return $q.reject(errorMessage);
+      });
     }
 
-    function searchRentals() {
-      var deferred = $q.defer();
-      setTimeout(function () {
-        deferred.resolve([
-          {"car":{"description":"Meriva", "id":988, "manufacturer":"Opel", "price":65.50}, "hireEndDate":new Date(2011, 10, 07), "hireStartDate":new Date(2011, 10, 07), "id":178},
-          {"car":{"description":"Golf", "id":995, "manufacturer":"VW", "price":72.00}, "hireEndDate":new Date(2011, 11, 06), "hireStartDate":new Date(2011, 11, 05), "id":179},
-          {"car":{"description":"Golf", "id":1008, "manufacturer":"VW", "price":72.00}, "hireEndDate":new Date(2011, 11, 13), "hireStartDate":new Date(2011, 11, 13), "id":180}
-        ]);
-        $rootScope.$digest();
-      }, 50);
-      return deferred.promise;
+    function searchRentals(id, username, password) {
+      return $http({
+        url:backendBaseUri + '/rentals?customerId=' + id,
+        method:'GET',
+        headers:{
+          'Authorization':"Basic " + Base64.encode(username + ':' + password)
+        }
+      }).then(function(response) {
+          return response.data;
+        }, function (response) {
+          var errorCode = response.status;
+          var errorMessage = "Ein unbekannter Fehler ist aufgetreten.";
+          if (errorCode == 401) {
+            errorMessage = "Zugriff verweigert.";
+          }
+          return $q.reject(errorMessage);
+        });
     }
 
     return {
@@ -34,7 +51,7 @@
     }
   }
 
-  backendServiceFactory.$inject = ["$rootScope", "$q"];
+  backendServiceFactory.$inject = ["$http", "$q"];
 
   /*
    * rentalService

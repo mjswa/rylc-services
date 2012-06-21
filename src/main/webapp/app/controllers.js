@@ -7,11 +7,14 @@
   function ApplicationController(backendService, rentalService, $scope, $navigate) {
     $scope.username = "";
     $scope.password = "";
+    $scope.customer = {};
 
     $scope.login = function () {
       backendService.login($scope.username, $scope.password).then(function (customer) {
         $scope.customer = customer;
         $navigate("#welcomePage");
+      }, function(errorMessage) {
+        $scope.errorMessage = errorMessage;
       });
     };
 
@@ -20,7 +23,7 @@
     };
 
     $scope.searchRentals = function () {
-      backendService.searchRentals().then(function (rentals) {
+      backendService.searchRentals($scope.customer.id, $scope.username, $scope.password).then(function (rentals) {
         $scope.rentals = rentals;
       });
     };

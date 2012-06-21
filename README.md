@@ -5,6 +5,10 @@ Beispielcode zum Kapitel 7 Backendkommunikation im Buch [Mobile Web-Apps mit Jav
 *   Voraussetzungen:
     *   Java Development Kit 1.6 oder neuer.
     *   Apache Maven 3.0.4 oder neuer.
+*   Bauen der Backend-Komponente:
+    *   [rylc-backend](https://github.com/mjswa/rylc-backend) klonen
+    *   In das Verzeichnis `rylc-backend-jar` wechseln
+    *   Das Backend mittels `mvn clean install -Pintegration` bauen
 *   Bauen des Projekts inkl. Integrationstests: `mvn clean verify -Pintegration`.
     Dazu muss [Chrome](http://www.google.com/chrome) über den Kommandozeilen-Befehl `chrome` gestartet werden können.
     Alternativ kann die Property `browser` in `pom.xml` angepasst und dort der gewünschte Befehl zum Starten von Chrome

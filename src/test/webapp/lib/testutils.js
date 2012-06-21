@@ -22,6 +22,49 @@ jasmineui.inject(function () {
 
   // -----
 
+  var deferredResults = [];
+  var backendServiceResults = [];
+
+  function mockBackend() {
+
+    function backendServiceFactory($q) {
+      var backendService = {};
+      backendService.login = createSpy("login", $q);
+      backendService.searchRentals = createSpy("searchRentals", $q);
+      return backendService;
+    }
+
+    function createSpy(fn, $q) {
+      if (!deferredResults[fn]) {
+        deferredResults[fn] = $q.defer();
+      }
+      return jasmine.createSpy(fn).andCallFake(function () {
+        return deferredResults[fn].promise;
+      });
+    }
+
+    backendServiceFactory.$inject = ["$q"];
+    angular.module(["rylc-services"]).factory("backendService", backendServiceFactory);
+  }
+
+  function backendServiceResult(fn) {
+    if (!backendServiceResults[fn]) {
+      backendServiceResults[fn] = {
+        resolve:function (data) {
+          deferredResults[fn].resolve(data);
+          $("body").scope().$digest();
+        },
+        reject:function (data) {
+          deferredResults[fn].reject(data);
+          $("body").scope().$digest();
+        }
+      }
+    }
+    return backendServiceResults[fn];
+  }
+
+  // -----
+
   function activePage() {
     return $.mobile.activePage;
   }
@@ -115,6 +158,9 @@ jasmineui.inject(function () {
   }
 
   // -----
+
+  window.mockBackend = mockBackend;
+  window.backendServiceResult = backendServiceResult;
 
   window.activePageId = activePageId;
   window.activePageScope = activePageScope;

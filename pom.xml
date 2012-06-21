@@ -15,6 +15,11 @@
         <jetty.stopPort>9595</jetty.stopPort>
         <jetty.version>7.6.4.v20120524</jetty.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- datasource properties -->
+        <jdbc.driverClassName>org.h2.Driver</jdbc.driverClassName>
+        <jdbc.url>jdbc:h2:mem:rylc-backend</jdbc.url>
+        <jdbc.username>rylc</jdbc.username>
+        <jdbc.password>rylc</jdbc.password>
     </properties>
 
     <build>
@@ -48,6 +53,11 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>rylc-backend-jar</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>com.googlecode.jstd-maven-plugin</groupId>
             <artifactId>jstd-maven-plugin</artifactId>

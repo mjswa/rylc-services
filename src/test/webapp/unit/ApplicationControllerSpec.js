@@ -41,8 +41,8 @@ describe('ApplicationController', function () {
     expect($scope.password).toBeFalsy();
   });
 
-  it('should have an undefined customer after create', function () {
-    expect($scope.customer).toBeUndefined();
+  it('should have an empty customer after create', function () {
+    expect($scope.customer).toEqual({});
   });
 
   it('should have undefined rentals after create', function () {
@@ -102,6 +102,13 @@ describe('ApplicationController', function () {
   });
 
   describe('searchRentals', function () {
+    it('should pass customer id and credentials to backend service', function () {
+      $scope.username = "someUsername";
+      $scope.password = "somePassword";
+      $scope.customer = {id:"someID"};
+      $scope.searchRentals();
+      expect(backendService.searchRentals).toHaveBeenCalledWith("someID", "someUsername", "somePassword");
+    });
     it('should store the search result', function () {
       var result = "someResult";
       $scope.searchRentals();
