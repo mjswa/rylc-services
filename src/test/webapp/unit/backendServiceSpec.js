@@ -24,9 +24,9 @@ describe("backendSerivce", function () {
   describe("searchRentals", function () {
     it("should return promise with expected rentals", function () {
       var expectedRentals = [
-        {"car":{"description":"Meriva", "id":988, "manufacturer":"Opel", "price":65.50}, "hireEndDate":new Date(2011, 10, 07), "hireStartDate":new Date(2011, 10, 07), "id":178},
-        {"car":{"description":"Golf", "id":995, "manufacturer":"VW", "price":72.00}, "hireEndDate":new Date(2011, 11, 06), "hireStartDate":new Date(2011, 11, 05), "id":179},
-        {"car":{"description":"Golf", "id":1008, "manufacturer":"VW", "price":72.00}, "hireEndDate":new Date(2011, 11, 13), "hireStartDate":new Date(2011, 11, 13), "id":180}
+        {"car":{"description":"Meriva", "id":988, "manufacturer":"Opel", "price":65.50}, "hireEndDate":new Date(2012, 5, 4), "hireStartDate":new Date(2012, 5, 4), "id":178},
+        {"car":{"description":"Golf", "id":995, "manufacturer":"VW", "price":72.00}, "hireEndDate":new Date(2012, 5, 8), "hireStartDate":new Date(2012, 5, 7), "id":179},
+        {"car":{"description":"Golf", "id":1008, "manufacturer":"VW", "price":72.00}, "hireEndDate":new Date(2012, 5, 11), "hireStartDate":new Date(2012, 5, 11), "id":180}
       ];
       var actualRentals;
       backendService.searchRentals().then(function (data) {
